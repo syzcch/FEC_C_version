@@ -9,7 +9,9 @@ How to use it?
 In linux system:
 
   make clean
+  
   make
+  
   ./fec_rdp
   
 You can revise fec_rdp.cpp to testing it.
