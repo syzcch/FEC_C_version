@@ -25,6 +25,7 @@ int main() {
 	
 	
 	// testing 3 errors, error disk sequence number is 0,1,3
+	err[0]=0;
     err[1]=0;
     err[3]=0;
     rsItem->setErrData(err);

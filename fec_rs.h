@@ -9,12 +9,6 @@
  *
  */
 using namespace std;
-#define W_8
-#ifdef W_8
-  typedef unsigned char unit;
-#elif W_16
-  typedef unsigned short unit;
-#endif
 
 #define prim_poly_32 020000007
 #define prim_poly_16 0210013
@@ -253,7 +247,7 @@ public:
         int l=0;
 
         buff=(char **) malloc(sizeof(char *)*allNum); 
-        for (int i = 0; i < (num+FT_NUM); i++) {
+        for (int i = 0; i < (allNum); i++) {
             buff[i] = (char *) malloc(stripe_unit_size);
             memset(buff[i],0,stripe_unit_size);
         }
