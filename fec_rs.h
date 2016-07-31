@@ -174,7 +174,7 @@ public:
 
         for(int i=0;i<n;i++)
         {
-     	   for(int l=0;l<DATA_LENGTH;l++)
+     	   for(int l=0;l<stripe_unit_size;l++)
      	   {
     		   buffer[i][l]=rs[i][l];
      	   }
@@ -192,12 +192,9 @@ public:
                 tmp = vdm[i*cols+j]; 
 	            if (0 != tmp) {
                     factor = gf_single_divide(tmp, factors[j]);
-            //		printk("factor: %d\n",factor);
                     factors[j] = tmp;
                     gf_mult_region(buffer[j], stripe_unit_size, factor);
-            //		printk("mult hou the rs is %s\n",buffer[j]);
                     gf_add_parity(buffer[j], block, stripe_unit_size);// do parity check
-            //      printk("the block is %s",block);
 	        	}
 	    	}
 		
@@ -255,8 +252,8 @@ public:
             memset(buffer[i],0,stripe_unit_size);
         }
         
-        for(j=0;j<(num+rsNum);j++){
-        	for(i=0;i<stripe_unit_size;i++)
+        for(int j=0;j<(num+rsNum);j++){
+        	for(int i=0;i<stripe_unit_size;i++)
         	{
         	    buff[j][i] = rs[j][i];
         	} 
@@ -410,6 +407,7 @@ public:
         }
         return zzz;
     }
+    
     int gf_single_divide(int a, int b)
     {
         int sum_j;
