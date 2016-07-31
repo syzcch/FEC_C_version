@@ -12,6 +12,6 @@ In linux system:
   
   make
   
-  ./fec_rdp
+  ./fec_rdp  or ./fec_rs
   
 You can revise fec_rdp.cpp to testing it.
