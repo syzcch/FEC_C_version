@@ -16,19 +16,6 @@ using namespace std;
 #define prim_poly_4 023
 #define prim_poly_2 07
 
-#ifdef W_8
-  static int Modar_w = 8;
-  static int Modar_nw = 256;
-  static int Modar_nwm1 = 255;
-  static int Modar_poly = prim_poly_8;
- #endif
-
-#ifdef W_16
-  static int Modar_w = 16;
-  static int Modar_nw = 65536;
-  static int Modar_nwm1 = 65535;
-  static int Modar_poly = prim_poly_16;
-#endif
 
 static int *B_TO_J;
 static int *J_TO_B;
