@@ -489,8 +489,6 @@ public:
         cta = (unsigned char *) to_add;
         ctm = (unsigned char *) to_modify;
 
-     //   printf("in add_parity 1\n");
-
       /* Align to long boundary */
         if (ta != 0) {
             while (ta != sizeof(unsigned long) && size > 0) {
@@ -733,8 +731,6 @@ public:
                 k++;
             }
         }
-
-        /* pic(inv, copy, rows, "Start"); */
 
         /* First -- convert into upper triangular */
         for (i = 0; i < cols; i++) {
