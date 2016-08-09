@@ -12,6 +12,6 @@ In linux system:
   
   make
   
-  ./fec_rdp  or ./fec_rs
+  ./fec_rdp  or ./fec_rs or ./fec_star
   
-You can revise fec_rdp.cpp to testing it.
+You can revise fec_rdp.cpp, fec_rs.cpp and fec_star to testing them.
