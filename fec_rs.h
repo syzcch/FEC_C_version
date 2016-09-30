@@ -1,7 +1,11 @@
+#ifndef __RS_H__
+#define  __RS_H__
+
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+//#include <string.h>
+#include "fec.h"
 
 /**
  * Erasure code Reed-Solomon. C++ version
@@ -10,11 +14,11 @@
  */
 using namespace std;
 
-#define prim_poly_32 020000007
-#define prim_poly_16 0210013
+//#define prim_poly_32 020000007
+//#define prim_poly_16 0210013
 #define prim_poly_8 0435
-#define prim_poly_4 023
-#define prim_poly_2 07
+//#define prim_poly_4 023
+//#define prim_poly_2 07
 
 
 static int *B_TO_J;
@@ -29,7 +33,7 @@ typedef struct {
 } Condensed_Matrix;
 
 
-class rscode {
+class rscode: public fec {
     
 private:
     unsigned int num; // original data cols num
@@ -60,7 +64,7 @@ public:
         inthis = new int[allNum];
         for(int i = 0; i < allNum; i++)
         {
-            inthis[i] = 1;
+            inthis[i] = 0;
         }
     }
 
@@ -81,7 +85,7 @@ public:
         inthis = new int[allNum];
         for(int i = 0; i < allNum; i++)
         {
-            inthis[i] = 1;
+            inthis[i] = 0;
         }
     }
 
@@ -133,7 +137,7 @@ public:
     /**
 	 * for testing and debug.
 	 */
-	void outputOdata()
+	void outputData()
 	{
 		
 		printf("The res:");
@@ -148,7 +152,7 @@ public:
 	 * rs encoding main function. 
 	 * there is a simple testcase in setData func 
 	 */
-	 void encoding_rs()
+	 void encoding()
      {
         int cols,rows;
         int factor=0,*factors;
@@ -160,6 +164,11 @@ public:
 	    char **buffer;
         int l=0;
         int numx=num;
+
+        if(allNum != num + rsNum){
+			printf("the addition of data disk num and checksum disk num should equal to allNum \n");
+            exit(1);
+		}
 
         n=num;
 	    cols=n;
@@ -215,7 +224,7 @@ public:
         }
      }
 
-    void decoding_rs()
+    void decoding()
     {
         int *vdm;
         Condensed_Matrix *cm;
@@ -262,7 +271,7 @@ public:
         j=0;
         for (int i = 0; i <rows && j <cols; i++) 
   	    {
-  	        if (inthis[i]==0){
+  	        if (1 == inthis[i]){
                map[i]=-1;
   	        }
 	        else{
@@ -341,7 +350,7 @@ public:
 
     }
 
-    string code_show(){
+    string showme(){
 
         return "rs";
     }
@@ -836,3 +845,5 @@ public:
         return prod;
     }
 };
+
+#endif

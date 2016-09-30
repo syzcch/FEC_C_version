@@ -13,7 +13,7 @@ int main() {
     star *starItem = new star(6,257,1024);
     
     starItem->setData();
-    starItem->STAR_encoding();
+    starItem->encoding();
     starItem->outputData();
 
     // 1 means fault data
@@ -27,7 +27,7 @@ int main() {
 //    err[3]=1;
 
     starItem->setErrData(err);
-    starItem->STAR_decoding();
+    starItem->decoding();
     starItem->outputOrigin();
     
 }

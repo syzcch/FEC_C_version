@@ -1,14 +1,19 @@
+#ifndef __STAR_H__
+#define  __STAR_H__
+
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+//#include <string.h>
+#include "fec.h"
+
 /**
  * Erasure code STAR. C++ version
  * @author Roger Song
  *
  */
 using namespace std;
-class star{
+class star: public fec {
 
 private:
     int  check_data_size;
@@ -92,6 +97,10 @@ public:
 		}
 	}
 
+    string showme(){
+		return "STAR";
+	}
+
     // 1 means error, default value is 0
     void setErrData(int *err)
     {
@@ -139,7 +148,7 @@ public:
     /**
 	 *  entry function for encoding
 	 */
-    void STAR_encoding()
+    void encoding()
     {
         if( check_data_size % block_nbr != 0)
     	{
@@ -254,7 +263,7 @@ public:
     /**
 	 *  entry function for decoding
 	 */
-    void STAR_decoding()
+    void decoding()
     {
     	int i,j,k,m,stripe;
     	int rs_nbr = 0;      /*rs_nbr means error data number*/
@@ -1114,3 +1123,5 @@ public:
 
     }
 };
+
+#endif

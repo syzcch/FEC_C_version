@@ -10,26 +10,26 @@ int main() {
 	printf("starting");
 //	rscode *rsItem = new rscode();
 
-    //all data is 8, checksum data is 3, data stripe length is 1024
-    rscode *rsItem = new rscode(8,3,1024);
+    //all original data is 8, checksum data is 3, data stripe length is 1024
+    rscode *rsItem = new rscode(11,3,1024);
     int *err = new int[NUM];
 
-    // 0 means fault data
+    // 1 means fault data
     for(int i=0;i<NUM;i++){
-        err[i] = 1;
+        err[i] = 0;
     }
 
     rsItem->setData();
-	rsItem->encoding_rs();
-	rsItem->outputOdata();
+	rsItem->encoding();
+	rsItem->outputData();
 	
 	
 	// testing 3 errors, error disk sequence number is 0,1,3
-	err[0]=0;
-    err[1]=0;
-    err[3]=0;
+	err[0]=1;
+    err[1]=1;
+    err[3]=1;
     rsItem->setErrData(err);
-    rsItem->decoding_rs();
+    rsItem->decoding();
 	rsItem->outputOrigin();
 	
 

@@ -1,14 +1,20 @@
+
+#ifndef __RDP_H__
+#define  __RDP_H__
+
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+//#include <string.h>
+#include "fec.h"
+
 /**
  * Erasure code RDP. C++ version
  * @author Roger Song
  *
  */
 using namespace std;
-class rdp {
+class rdp: public fec {
     
 private:
     int disks;  // data column number
@@ -21,6 +27,7 @@ private:
     char  **idata;  // original data
     char  **odata;  // redundant data
     char  **data;   // for decoding
+    int *inthis;
     
 public:
 	rdp(){
@@ -47,6 +54,8 @@ public:
 	        data[i]=(char *) malloc(sizeof(char)*stripe_unit_size);
 	        memset(data[i],0,stripe_unit_size);
 	    }  
+
+        inthis = (int *)malloc(sizeof(int *)*allDisks);
         
 	}
 	
@@ -74,7 +83,8 @@ public:
 	        data[i]=(char *) malloc(sizeof(char)*stripe_unit_size);
 	        memset(data[i],0,stripe_unit_size);
 	    }  
-        
+
+        inthis = (int *)malloc(sizeof(int *)*allDisks);
 	}
 
     ~rdp(){
@@ -93,6 +103,18 @@ public:
 	        free(data[i]);
 	    }  
         free(data);
+
+        free(inthis);
+    }
+
+    void setErrData(int* err)
+    {
+        for(int i = 0; i < allDisks; i++ )
+        {
+        	if(1 == err[i]){
+        		inthis[i] = 1;
+        	}
+        }
     }
 	
 
@@ -165,7 +187,6 @@ public:
 
 
 	}
-	
 
 	/**
 	 * rdp encoding main function. 
@@ -174,11 +195,10 @@ public:
 
 	void encoding(){
 		
-		setData();
+//!		setData();
 		outputRes();
 		rdp_encoding();
-	}
-	
+	}	
 
 	/**
 	 * rdp decoding main function.
@@ -188,16 +208,48 @@ public:
 	 * @param two
 	 * @param rError
 	 */
-	void decoding(int errorNum, int one, int two, bool rError){
+	void decoding(){
 		
-		int oneData = one + 2;
-		int twoData = two + 2;
+		int errNum = 0;
+		int oneData = 0,one = 0;
+		int twoData = 0,two = 0;
+		bool rError = false;
+		int errCount = 0;
+
+		for(int i = 0; i < allDisks; i++){
+			if(1 == inthis[i]){
+				errCount++;
+				if(1 == errCount){
+					oneData = i + 2;
+					one = i;
+					if(one < disks){
+						errNum++;
+					}
+				}
+				else if(2 == errNum){
+					twoData = i + 2;
+					two = i;
+					if(two < disks){
+						errNum++;
+					}
+				}
+			}
+		}
+
+        if(disks == two){
+			rError = true;
+		}
+        
 		// rdp 
-		if(errorNum > 2 || errorNum < 1){
-			printf("Error NUM is too larger or smaller! It should be [1,2] \n");
+		if(0 == errNum){
+			printf("No Error data need be recovery! \n");
 			return;
 		}
-		if(errorNum == 2 && (one < 0 || one >= disks || two < 0 || one >= disks)){
+		if(errCount > 2){
+			printf("Error NUM is too larger! It should be [1,2] \n");
+			return;
+		}
+		if(errNum == 2 && (one < 0 || one >= disks || two < 0 || two >= disks)){
 			printf("Error NUM is 2, but detailed error col numbers are wrong! Thay are should be [0,disks) \n");
 			return;
 		}
@@ -215,7 +267,7 @@ public:
 			data[oneData][i] = 0;
 		}
 		
-		if(errorNum == 1){
+		if(errNum == 1){
 			if(rError){
 				for(int i = 0; i < stripe_unit_size; i++){
 					data[0][i] = 0;
@@ -228,7 +280,6 @@ public:
 			else{
 				rdp_decoding_r(data, disks, stripe_unit_size, w, oneData);
                 memcpy(idata[one], data[oneData], stripe_unit_size* sizeof(char));
-
 			}
 		}
 		else{
@@ -551,7 +602,7 @@ public:
 	/**
 	 * for testing and debug.
 	 */
-	void outputOdata(){
+	void outputData(){
 		
 		printf("The res:");
 		printf("odata:0:  ");
@@ -561,6 +612,7 @@ public:
 		printf(odata[1]);
         printf("\n");
 	}
+
 
 	/**
 	 * for testing and debug.
@@ -578,3 +630,4 @@ public:
 
 };
 
+#endif
