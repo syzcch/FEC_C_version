@@ -6,7 +6,8 @@
 /**
  * testing all my fec code.
  */
-int main() {
+int main()
+{
 
     printf("starting");
 
@@ -18,24 +19,25 @@ int main() {
 //    fec *fecCode = new star(6,257,1024);
     fec *fecCode = new rdp();
 
-    
+
     fecCode->setData();
     fecCode->encoding();
     fecCode->outputData();
 
     // 1 means fault data
-    for(int i=0;i<NUM;i++){
+    for(int i=0; i<NUM; i++)
+    {
         err[i] = 0;
     }
 
     err[0]=1;
- //   err[1]=1;
- //   err[2]=1;
+//   err[1]=1;
+//   err[2]=1;
     err[3]=1;
 
     fecCode->setErrData(err);
     fecCode->decoding();
     fecCode->outputOrigin();
-    
+
 }
 
