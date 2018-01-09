@@ -11,7 +11,7 @@ int main() {
 	printf("starting");
 	rdp *rdpItem = new rdp();
 
-  rdpItem->setData();
+    rdpItem->setData();
 	rdpItem->encoding();
 	rdpItem->outputData();
 	
